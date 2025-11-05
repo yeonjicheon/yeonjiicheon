@@ -1,0 +1,289 @@
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2025 by anonymous (http://jsbin.com/towulufeya/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<style id="jsbin-css">
+/* 기본 스타일 초기화 및 배경 설정 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif; /* 한국어 폰트 적용 */
+    overflow: hidden; /* 스크롤바 제거 */
+    background-color: black;
+    color: white;
+}
+
+/* 폰트 임포트 (Noto Sans KR, Helvetica) */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap');
+
+/* --- 상단 타이틀 및 설명 고정 --- */
+#project-title,
+#project-description {
+    position: fixed;
+    top: 1.3vh; /* 상단 여백 설정 */
+    z-index: 1000; /* 영상 및 버튼 위에 표시 */
+    font-weight: bold;
+    color: white;
+}
+
+/* 왼쪽 상단 타이틀 */
+#project-title {
+    left: 2%;
+    font-size: 1.5em;
+    font-family: 'Helvetica', sans-serif; /* Helvetica 폰트 적용 */
+}
+
+/* 오른쪽 상단 설명 */
+#project-description {
+    right: 2%;
+    font-size: 0.9em;
+    line-height: 1.5;
+    text-align: right;
+    font-family: 'Noto Sans KR', sans-serif; /* Noto Sans KR 폰트 적용 */
+}
+
+/* --- Vimeo 플레이어 컨테이너 (상단 여백 외 좌우/하단 여백 없음) --- */
+#vimeo-container {
+    position: absolute;
+    top: 7vh; /* 상단 텍스트를 위한 공간 확보 */
+    left: 0;
+    width: 100%;
+    /* 화면 높이에서 상단 7vh를 제외한 나머지 영역을 모두 차지 */
+    height: calc(100vh - 7vh); 
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* iframe을 컨테이너에 꽉 채우기 */
+#vimeo-container iframe {
+    width: 1920;
+    height: 1080;
+    display: yellow;
+}
+
+/* --- 버튼 컨테이너 (중앙 하단 고정) --- */
+#controls {
+    position: fixed;
+    bottom: 3vh; /* 화면 하단에서 뷰포트 높이 기준으로 띄우기 */
+    left: 50%;
+    transform: translateX(-50%); /* X축 중앙 정렬 */
+    display: flex;
+    gap: 3vw; /* 버튼 사이 간격도 뷰포트 기준으로 설정 */
+    z-index: 20; /* 영상 및 텍스트 위에 위치 */
+}
+
+/* --- 버튼 스타일 (반응형 적용) --- */
+button {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    
+    /* 버튼 크기를 뷰포트 너비에 비례하게 설정 (반응형) */
+    width: 5.5vw; 
+    height: 5.5vw;
+    border-radius: 50%; /* 원형 */
+    padding: 0; 
+    
+    margin: 0;
+    /* 버튼 텍스트 크기도 뷰포트 너비에 비례하게 설정 (가장 중요) */
+    font-size: 1vw; 
+    text-align: center;
+    line-height: 1.1;
+    cursor: pointer;
+    
+    /* 버튼 기본 스타일: 노란색 배경 */
+    background: yellow;
+    color: black;
+    border: 1.5px solid black;
+
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.1s ease; /* 부드러운 전환 효과 */
+}
+
+/* 마우스 오버 시 효과 */
+button:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); /* 노란색 빛 효과 추가 (0.0에서 0.5로) */
+    transform: scale(1.05); /* 약간 커짐 */
+}
+
+/* 버튼 클릭/활성화 시 색상 변경 효과 */
+button:active {
+    background: white; 
+    color: black; 
+    border-color: black; 
+    transform: scale(0.98); /* 살짝 눌리는 효과 */
+}
+
+/* 미디어 쿼리: 모바일 환경 대응 (vw가 너무 작아지는 것을 방지) */
+@media (max-width: 600px) {
+    /* 모바일에서는 상단 텍스트 크기를 고정 단위나 vh를 사용하여 적절히 조절 */
+    #project-title {
+        font-size: 5vw; 
+    }
+    #project-description {
+        font-size: 3vw;
+        text-align: left;
+        top: 6vh; 
+    }
+
+    #vimeo-container {
+        top: 10vh;
+        height: calc(100vh - 10vh);
+    }
+    
+    #controls {
+        gap: 20px;
+        bottom: 15px;
+    }
+
+    /* 모바일에서는 버튼 크기를 더 크게 설정 */
+    button {
+        width: 15vw;
+        height: 15vw;
+        font-size: 3.5vw;
+    }
+}
+</style>
+<body>
+
+    <!-- 왼쪽 상단 타이틀 (Helvetica) -->
+    <div id="project-title">
+        06bus <br>
+    </div>
+ 
+
+    <!-- 오른쪽 상단 설명 (Noto Sans KR) -->
+    <div id="project-description">
+        06번 버스 타고 학교까지 통학하는 일상의 궤적 6.6!<br>
+       범계에서 계원예술대학교까지의 사적인 풍경 궤적 아카이브
+    </div>
+
+    <!------- Vimeo 플레이어 컨테이너 -------->
+    <div id="vimeo-container">
+        <iframe
+            id="vimeo-player"
+            src="https://player.vimeo.com/video/1133250901?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&controls=0&background=1"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            allowfullscreen
+            title="1104. 느리게mp4"
+        ></iframe>
+    </div>
+
+    <!-- 원형 버튼 (중앙 하단) -->
+    <div id="controls">
+        <!-- 출발: 1초로 이동 후 재생 -->
+        <button onclick="seekTo(1)">출발</button>
+        <!-- 북마크 이동: 순서대로 지정된 시간으로 이동 및 ID 연결 -->
+        <button onclick="moveToNextBookmark()" id="bookmarkBtn">멈춤</button>
+        <!-- 도착: 33초로 이동 후 재생 -->
+        <button onclick="seekTo(33)">도착</button>
+    </div>
+
+
+    <!-- Vimeo Player API 로드 및 JavaScript 코드 시작점 -->
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    <!-- JavaScript 코드는 아래 파일에 연결됩니다. -->
+<script id="jsbin-javascript">
+// Global variables to store the Vimeo player instance and control states
+let player = null; 
+let isPlaying = true;
+let bookmarkBtn = null; // '북마크 이동' 버튼 요소를 저장할 변수
+
+// 북마크 시간 (초 단위). 1분 = 60초, 1분 17초 = 77초, 1분 22초 = 82초
+const BOOKMARKS = [
+    9, 12, 17, 23, 39, 50, 54, 60, 77, 82
+];
+let currentBookmarkIndex = 0;
+
+// window.onload를 사용하여 모든 HTML 요소가 로드된 후 Vimeo Player를 초기화합니다.
+window.onload = function() {
+    try {
+        const iframe = document.getElementById('vimeo-player');
+        if (!iframe) {
+            console.error("Error: Vimeo iframe with ID 'vimeo-player' not found.");
+            return;
+        }
+
+        // Vimeo Player API 초기화
+        player = new Vimeo.Player(iframe); 
+        console.log("Vimeo Player initialized successfully. Ready for commands.");
+
+        // '북마크' 버튼 요소 가져오기
+        bookmarkBtn = document.getElementById('bookmarkBtn'); 
+
+        // 초기 재생 상태 확인 및 텍스트 설정 (버튼 텍스트는 '멈춤'으로 고정)
+        player.getPaused().then(function(paused) {
+             isPlaying = !paused;
+        }).catch(error => {
+            console.warn("Could not determine initial playback state:", error);
+        });
+        
+    } catch (error) {
+        console.error("Vimeo Player initialization failed. Check if vimeo player.js is loaded.", error);
+    }
+};
+
+/**
+ * 특정 시간으로 이동 후 재생을 시작합니다.
+ * [출발], [도착] 버튼에서 사용됩니다.
+ * @param {number} seconds - 이동할 시간(초)
+ */
+function seekTo(seconds) {
+    if (!player) {
+        console.warn("Player not yet initialized.");
+        return;
+    }
+
+    player.setCurrentTime(seconds).catch(error => {
+        console.error("Seeking failed:", error);
+    });
+    
+    // 이동 후 바로 재생 상태로 변경
+    player.play();
+    isPlaying = true;
+
+    // 북마크 인덱스를 초기화합니다. (새로운 시퀀스를 시작할 수 있도록)
+    currentBookmarkIndex = 0;
+}
+
+/**
+ * 미리 정의된 북마크 시간으로 순서대로 이동합니다.
+ * [멈춤] 버튼(북마크 이동 기능)에서 사용됩니다.
+ */
+function moveToNextBookmark() {
+    if (!player) {
+        console.warn("Player not yet initialized.");
+        return;
+    }
+
+    // 다음 북마크 시간 가져오기
+    const nextTime = BOOKMARKS[currentBookmarkIndex];
+
+    if (nextTime !== undefined) {
+        // 해당 시간으로 이동
+        player.setCurrentTime(nextTime).catch(error => {
+            console.error(`Seeking to bookmark ${nextTime} failed:`, error);
+        });
+        
+        // 이동 후 바로 재생 상태로 변경
+        player.play();
+        isPlaying = true;
+
+        // 인덱스를 다음 북마크로 업데이트 (마지막이면 처음으로 순환)
+        currentBookmarkIndex = (currentBookmarkIndex + 1) % BOOKMARKS.length;
+        
+    } else {
+        console.warn("No bookmarks defined or index out of bounds.");
+    }
+}
+
+</script>
+</body>
+
